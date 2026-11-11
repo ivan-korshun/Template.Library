@@ -1,0 +1,38 @@
+include:
+  - docker-compose.infra.yml
+
+services:
+  library-integration-tests:
+    image: ${DOCKER_REGISTRY:-localhost:5000}/library-integration-tests:${TAG:-dev}
+    build:
+      context: .
+      dockerfile: tests/Template.Library.IntegrationTests/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      Library__ClientCredentials__InternalApi__Audience:
+      Library__ClientCredentials__InternalApi__ClientId:
+      Library__ClientCredentials__InternalApi__ClientSecret:
+      Library__ClientCredentials__InternalApi__TokenEndpoint:
+      Library__CORS__Default__AllowedOrigins:
+      Library__CORS__Default__AllowedMethods:
+      Library__CORS__Default__AllowedHeaders:
+      Library__DB__ConnectionString:
+      Library__JwtBearer__Authority:
+      Library__JwtBearer__Audiences:
+      Library__OpenApi__Enabled:
+      Library__OpenApi__UiEnabled:
+      Library__OrganizationService__Host:
+      NLog__rules__0__writeTo:
+      NLog__targets__logFile__filename:
+      NLog__targets__logFile__layout:
+      NLog__targets__logFile__type:
+      NLog__targets__textConsole__type:
+      NLog__targets__textConsole__layout:
+    volumes:
+      - ${RESULTS_DIR:-./artifacts}:/artifacts
+      - ${RESULTS_DIR:-./artifacts}/logs:/logs
+    depends_on:
+      setup-db-schema:
+        condition: service_completed_successfully
+      org-api:
+        condition: service_started

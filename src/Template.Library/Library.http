@@ -1,0 +1,141 @@
+@Library_Host = http://localhost:5259
+@User_Agent = Visual Studio HTTP File Editor
+
+@Authority = https://dev-ik.eu.auth0.com/
+@Audience = https://library.dev.ik
+@ClientId = TGVBLQPd1bWJ3eUTuzDtJv2FBbcetu12
+
+### Device Flow 1
+# @name deviceAuth
+POST {{Authority}}oauth/device/code
+Content-Type: application/x-www-form-urlencoded
+User-Agent: {{User_Agent}}
+
+client_id={{ClientId}}&audience={{Audience}}
+
+### Device Flow 2
+# @name login
+POST {{Authority}}oauth/token
+Content-Type: application/x-www-form-urlencoded
+User-Agent: {{User_Agent}}
+
+grant_type=urn:ietf:params:oauth:grant-type:device_code&client_id={{ClientId}}&device_code={{deviceAuth.response.body.$.device_code}}
+
+### Books
+
+### Get checkpoint page
+# QUERY {{Library_Host}}/api/v1/books?limit=2
+# Accept: application/json
+
+### Get offset page
+@bPageSize = 20
+@bPageNumber = 1
+@bIncludeTotal = true
+GET {{Library_Host}}/api/v1/books?pageSize={{bPageSize}}&pageNumber={{bPageNumber}}&includeTotal={{bIncludeTotal}}
+Authorization: Bearer {{login.response.body.$.access_token}}
+User-Agent: {{User_Agent}}
+
+### Get by ID
+@gbid = d123fe1e652e4a9c975e320d5d5981d5
+GET {{Library_Host}}/api/v1/books/{{gbid}}
+Authorization: Bearer {{login.response.body.$.access_token}}
+User-Agent: {{User_Agent}}
+
+### Create
+POST {{Library_Host}}/api/v1/books
+Authorization: Bearer {{login.response.body.$.access_token}}
+User-Agent: {{User_Agent}}
+Content-Type: application/json
+{
+  "title": "Clean Architecture 7",
+  "genre": "Fantasy",
+  "PageCount": 11,
+  "Available": true,
+  "AddedAt": "2026-12-23T13:05:17Z",
+  "authors": ["Robert C. Martin 4", "4 Second Author 2"]
+}
+
+### Update
+@ubid = 0e024cc6023d4371988131d32db1983f
+PATCH {{Library_Host}}/api/v1/books/{{ubid}}
+Authorization: Bearer {{login.response.body.$.access_token}}
+User-Agent: {{User_Agent}}
+If-Math: "AAAAAAAAhPU="
+Content-Type: application/json
+{
+  "genre": "Fantasy",
+  "authors": ["Robert C. Martin 3", "4 Second Author 2"]
+}
+
+### Delete
+@dbid = 4037c10765594eb1bfe668808ceb891e
+DELETE {{Library_Host}}/api/v1/books/{{dbid}}
+Authorization: Bearer {{login.response.body.$.access_token}}
+User-Agent: {{User_Agent}}
+
+## -------
+## Authors
+## -------
+
+### Get checkpoint page
+GET {{Library_Host}}/api/v1/authors?limit=3&from=0&fullName=
+Authorization: Bearer {{login.response.body.$.access_token}}
+User-Agent: {{User_Agent}}
+
+### Get offset page
+@pageSize = 3
+@pageNumber = 1
+@includeTotal = true
+GET {{Library_Host}}/api/v1/authors?pageSize={{pageSize}}&pageNumber={{pageNumber}}&includeTotal={{includeTotal}}
+Authorization: Bearer {{login.response.body.$.access_token}}
+User-Agent: {{User_Agent}}
+
+### Get by ID
+@gaid = 279fab7ebcd14167a2a38ead8d122c5e
+GET {{Library_Host}}/api/v1/authors/{{gaid}}
+Authorization: Bearer {{login.response.body.$.access_token}}
+User-Agent: {{User_Agent}}
+
+### Create
+POST {{Library_Host}}/api/v1/authors
+Authorization: Bearer {{login.response.body.$.access_token}}
+User-Agent: {{User_Agent}}
+Content-Type: application/json
+{
+  "FullName": "Some Author 2",
+  "country": "UA",
+  "Birthday": "2000-11-23"
+}
+
+### Update
+@uaid = bed5f001d1e84a6387ab1c0de33a3ec4
+PATCH {{Library_Host}}/api/v1/authors/{{uaid}}
+Authorization: Bearer {{login.response.body.$.access_token}}
+User-Agent: {{User_Agent}}
+If-Match: "AAAAAAABftU="
+Content-Type: application/json
+{
+  "famous": true,
+  "FullName": "Some Author3"
+}
+
+### Delete
+@daid = bed5f001d1e84a6387ab1c0de33a3ec4
+DELETE {{Library_Host}}/api/v1/authors/{{daid}}
+Authorization: Bearer {{login.response.body.$.access_token}}
+User-Agent: {{User_Agent}}
+
+## --------
+## Branches
+## --------
+
+### Get all
+GET {{Library_Host}}/api/v1/branches
+Authorization: Bearer {{login.response.body.$.access_token}}
+User-Agent: {{User_Agent}}
+
+
+### Get by ID
+GET {{Library_Host}}/api/v1/branches/1
+Authorization: Bearer {{login.response.body.$.access_token}}
+User-Agent: {{User_Agent}}

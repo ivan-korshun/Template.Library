@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+    <RunConfiguration>
+        <ResultsDirectory>../../artifacts</ResultsDirectory>
+    </RunConfiguration>
+    <LoggerRunSettings>
+        <Loggers>
+            <Logger friendlyName="trx" enabled="True">
+                <Configuration>
+                    <LogFileName>Template.Library.E2ETests.trx</LogFileName>
+                </Configuration>
+            </Logger>
+            <Logger friendlyName="html" enabled="True">
+                <Configuration>
+                    <LogFileName>Template.Library.E2ETests.html</LogFileName>
+                </Configuration>
+            </Logger>
+            <Logger friendlyName="console" enabled="True">
+                <Configuration>
+                    <Verbosity>detailed</Verbosity>
+                </Configuration>
+            </Logger>
+        </Loggers>
+    </LoggerRunSettings>
+</RunSettings>

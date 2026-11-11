@@ -1,0 +1,30 @@
+services:
+  library-api:
+    image: ${DOCKER_REGISTRY:-localhost:5000}/library-api:${TAG:-dev}
+    build:
+      context: .
+      dockerfile: src/Template.Library/Dockerfile
+      args:
+        - TAG
+    environment:
+      ASPNETCORE_URLS: http://0.0.0.0:5000;http://0.0.0.0:9090
+      Library__ClientCredentials__InternalApi__Audience:
+      Library__ClientCredentials__InternalApi__ClientId:
+      Library__ClientCredentials__InternalApi__ClientSecret:
+      Library__ClientCredentials__InternalApi__TokenEndpoint:
+      Library__CORS__Default__AllowedOrigins:
+      Library__CORS__Default__AllowedMethods:
+      Library__CORS__Default__AllowedHeaders:
+      Library__DB__ConnectionString:
+      Library__JwtBearer__Authority:
+      Library__JwtBearer__Audiences:
+      Library__OpenApi__Enabled:
+      Library__OpenApi__UiEnabled:
+      Library__OrganizationService__Host:
+    # Do not use container healthcheck if orchestrator (Kubernetes, Azure Container Apps, etc.) does own HTTP probes
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:5000/api/status/healthz"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 3
+    #   start_period: 30s

@@ -1,0 +1,22 @@
+<Solution>
+  <Folder Name="/solution items/">
+    <File Path=".dockerignore" />
+    <File Path=".editorconfig" />
+    <File Path="Directory.Build.props" />
+    <File Path="LICENSE" />
+    <File Path="NuGet.config" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/Template.Library.EntityFramework/Template.Library.EntityFramework.csproj" Id="08d87e07-851d-4076-852e-e6ce2538a2f9" />
+    <Project Path="src/Template.Library/Template.Library.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Template.Dependency.Emulation/Template.Dependency.Emulation.csproj" />
+    <Project Path="tests/Template.Library.UnitTests/Template.Library.UnitTests.csproj" />
+    <Project Path="tests/Template.Library.IntegrationTests/Template.Library.IntegrationTests.csproj" />
+    <Project Path="tests/Template.Library.E2ETests/Template.Library.E2ETests.csproj" />
+    <File Path="tests/.editorconfig" />
+    <File Path="tests/Directory.Build.targets" />
+  </Folder>
+</Solution>

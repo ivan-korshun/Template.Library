@@ -1,0 +1,26 @@
+services:
+  setup-db-schema:
+    extends:
+      file: docker-compose.database.yml
+      service: setup-db-schema
+    depends_on:
+      setup-db:
+        condition: service_completed_successfully
+
+  setup-db:
+    extends:
+      file: docker-compose.database.yml
+      service: setup-db
+    depends_on:
+      mssql:
+        condition: service_healthy
+
+  mssql:
+    extends:
+      file: docker-compose.database.yml
+      service: mssql
+
+  org-api:
+    extends:
+      file: docker-compose.dependency.emulation.yml
+      service: org-api

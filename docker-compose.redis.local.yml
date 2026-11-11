@@ -1,0 +1,32 @@
+services:
+  redis:
+    image: redis:7
+    container_name: redis
+    ports:
+      - "127.0.0.1:6379:6379" # The port is available only from local PC
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  redisinsight:
+    image: redis/redisinsight:latest
+    container_name: redisinsight
+    ports:
+      - "127.0.0.1:5540:5540" # The port is available only from local PC
+    environment:
+      - RI_REDIS_HOST=redis
+      - RI_REDIS_PORT=6379
+    volumes:
+      - redisinsight-data:/data
+    depends_on:
+      redis:
+        condition: service_healthy
+
+volumes:
+  redis-data:
+  redisinsight-data:

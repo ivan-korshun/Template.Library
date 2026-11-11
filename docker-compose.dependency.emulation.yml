@@ -1,0 +1,12 @@
+services:
+  org-api:
+    image: ${DOCKER_REGISTRY:-localhost:5000}/org-api:${TAG:-dev}
+    build:
+      context: .
+      dockerfile: tests/Template.Dependency.Emulation/Dockerfile
+      args:
+        - TAG
+    environment:
+      ASPNETCORE_URLS: http://0.0.0.0:5249
+    ports:
+      - 5249:5249
