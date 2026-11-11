@@ -1,0 +1,16 @@
+services:
+  library-e2e-tests:
+    image: ${DOCKER_REGISTRY:-localhost:5000}/library-e2e-tests:${TAG}
+    build:
+      context: .
+      dockerfile: tests/Template.Library.E2ETests/Dockerfile
+    environment:
+      LibraryTests__ClientCredentials__Audience:
+      LibraryTests__ClientCredentials__ClientId:
+      LibraryTests__ClientCredentials__ClientSecret:
+      LibraryTests__ClientCredentials__TokenEndpoint:
+      LibraryTests__LibraryHost:
+      TESTS_FILTER: ${TESTS_FILTER:-TestCategory!=NotForProd}
+    volumes:
+       - ${RESULTS_DIR:-./artifacts}:/artifacts
+       - ${RESULTS_DIR:-./artifacts}/logs:/logs

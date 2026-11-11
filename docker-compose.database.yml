@@ -1,0 +1,41 @@
+services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2025-CU9-ubuntu-24.04
+    user: root
+    environment:
+      MSSQL_SA_PASSWORD: "Password12345"
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: Developer
+    ports:
+      - 1444:1433
+    healthcheck:
+      test: /opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P "Password12345" -Q "SELECT 1" || exit 1
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+
+  setup-db:
+    image: ${DOCKER_REGISTRY:-localhost:5000}/setup-db:${TAG:-dev}
+    build:
+      context: .
+      dockerfile: scripts/LocalDB/Dockerfile
+    environment:
+      CONSUMER_LOGIN_NAME: "library_db_consumer"
+      CONSUMER_LOGIN_PASSWORD: "db-consumer-password-12345"
+      DATABASE_DB_NAME: "LibraryDB"
+      DATABASE_SCHEMA: "dbo"
+      OWNER_LOGIN_NAME: "library_db_owner"
+      OWNER_LOGIN_PASSWORD: "db-owner-password-12345"
+      SA_PASSWORD: "Password12345"
+      SERVER: "mssql"
+
+  setup-db-schema:
+    image: ${DOCKER_REGISTRY:-localhost:5000}/setup-db-schema:${TAG:-dev}
+    build:
+      context: .
+      dockerfile: src/Template.Library.EntityFramework/Dockerfile
+      args:
+        - TARGET_MIGRATION
+    environment:
+      Library__ConnectionString: "Data Source=mssql;Initial Catalog=LibraryDB;User ID=library_db_owner;Password=db-owner-password-12345;Encrypt=False"

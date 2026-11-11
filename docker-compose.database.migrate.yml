@@ -1,0 +1,8 @@
+services:
+ setup-db-schema:
+    environment:
+      DO_NOT_EXIT: 0
+      Library__ConnectionString:
+    extends:
+      file: docker-compose.database.yml
+      service: setup-db-schema

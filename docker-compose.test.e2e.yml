@@ -1,0 +1,14 @@
+include:
+  - docker-compose.yml
+  - docker-compose.override.yml
+
+services:
+   library-e2e-tests:
+    extends:
+      file: docker-compose.test.deployment.yml
+      service:  library-e2e-tests
+    environment:
+      TESTS_FILTER:
+    depends_on:
+      library-api:
+        condition: service_started

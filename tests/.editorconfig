@@ -1,0 +1,3 @@
+[*.cs]
+dotnet_diagnostic.CA1707.severity = none    # Remove the underscores from member name
+dotnet_diagnostic.CA1852.severity = none    # Type can be sealed 

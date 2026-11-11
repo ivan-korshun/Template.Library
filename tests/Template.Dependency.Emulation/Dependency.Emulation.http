@@ -1,0 +1,65 @@
+@Host = http://localhost:5249
+@User_Agent = Visual Studio HTTP File Editor
+
+@Authority = https://dev-ik.eu.auth0.com/
+@Audience = https://dependency.dev.ik
+@ClientId = TGVBLQPd1bWJ3eUTuzDtJv2FBbcetu12
+
+### Device Flow 1
+# @name deviceAuth
+POST {{Authority}}oauth/device/code
+Content-Type: application/x-www-form-urlencoded
+User-Agent: {{User_Agent}}
+
+client_id={{ClientId}}&audience={{Audience}}
+
+### Device Flow 2
+# @name login
+POST {{Authority}}oauth/token
+Content-Type: application/x-www-form-urlencoded
+User-Agent: {{User_Agent}}
+
+grant_type=urn:ietf:params:oauth:grant-type:device_code&client_id={{ClientId}}&device_code={{deviceAuth.response.body.$.device_code}}
+
+### Get All
+GET {{Host}}/api/v1/branches?
+Accept: application/json
+Authorization: Bearer {{login.response.body.$.access_token}}
+User-Agent: {{User_Agent}}
+
+### Get by ID
+GET {{Host}}/api/v1/branches/1
+Accept: application/json
+Authorization: Bearer {{login.response.body.$.access_token}}
+User-Agent: {{User_Agent}}
+
+### Create
+POST {{Host}}/api/v1/branches
+Accept: application/json
+Authorization: Bearer {{login.response.body.$.access_token}}
+Content-Type: application/json
+User-Agent: {{User_Agent}}
+{
+  "Country": "Ukraine",
+  "City": "Kyiv",
+  "Street": "Khreshchatyk",
+  "BuildingNumber": 23,
+  "Phone": "+380 99 11-222-33"
+}
+
+### Update
+PATCH {{Host}}/api/v1/branches/2
+Accept: application/json
+Authorization: Bearer {{login.response.body.$.access_token}}
+Content-Type: application/json
+User-Agent: {{User_Agent}}
+{
+  "BuildingNumber": 17,
+  "Phone": "+380 99 11-222-99"
+}
+
+### Delete
+DELETE {{Host}}/api/v1/branches/2
+Accept: application/json
+Authorization: Bearer {{login.response.body.$.access_token}}
+User-Agent: {{User_Agent}}
