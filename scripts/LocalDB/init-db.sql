@@ -1,0 +1,11 @@
+USE master
+
+IF NOT EXISTS (SELECT name FROM sys.schemas WHERE name = N'$(DATABASE_SCHEMA)')
+BEGIN
+  EXEC sys.sp_executesql N'CREATE SCHEMA [$(DATABASE_SCHEMA)] AUTHORIZATION [dbo]'
+END
+
+IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = N'$(DATABASE_DB_NAME)')
+BEGIN
+  EXEC sys.sp_executesql  N'CREATE DATABASE [$(DATABASE_DB_NAME)]'
+END

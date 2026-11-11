@@ -1,0 +1,20 @@
+services:
+  azurite:
+    image: "mcr.microsoft.com/azure-storage/azurite:3.37.0"
+    ports:
+      - "10000:10000"
+
+  azurite-setup:
+    image: "mcr.microsoft.com/azure-cli:2.92.0"
+    environment:
+      - AZURE_STORAGE_CONNECTION_STRING=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;
+    command: >
+      bash -c "#!/bin/sh
+               trap : TERM INT
+               rm -f done.txt &&
+               echo Creating Blob Containers in Azurite... &&
+               az storage container create --name my-container-a &&
+               az storage container create --name my-container-b &&
+               echo DONE"
+    depends_on:
+      - azurite

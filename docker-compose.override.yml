@@ -1,0 +1,18 @@
+include:
+  - docker-compose.infra.yml
+
+services:
+  library-api:
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://0.0.0.0:5000;http://0.0.0.0:9098
+    volumes:
+      - ./src/Template.Library/appsettings.Development.json:/app/appsettings.Development.json:ro
+    ports:
+      - 5259:5000
+      - 9098:9098
+    depends_on:
+      setup-db-schema:
+        condition: service_completed_successfully
+      org-api:
+        condition: service_started
